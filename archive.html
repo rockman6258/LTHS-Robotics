@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Archive - LT Robotics</title>
+    <link rel="icon" type="image/png" href="https://ltrobotics.org/gallery_gen/a2d5731c5531c5bf1c1604e77228af0c_400x400_fit.png?ts=1769354368">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        :root {
+            --lt-red: #c8102e; 
+            --lt-black: #111111;
+            --lt-white: #ffffff;
+            --bg-light: #f4f4f5; 
+            --text-main: #27272a;
+            --text-muted: #52525b;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Helvetica Neue", Arial, sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-main); line-height: 1.6; padding-top: 100px; }
+
+        /* Simplified Navigation */
+        header { background-color: var(--lt-black); position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 3px solid var(--lt-red); box-shadow: var(--shadow-md); }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 2rem; }
+        .logo { font-weight: 900; font-size: 1.5rem; color: var(--lt-white); text-decoration: none; display: flex; align-items: center; gap: 0.75rem; letter-spacing: -0.5px; }
+        .logo span { color: var(--lt-red); margin-left: 0.25rem; }
+        .logo img { height: 75px; width: auto; border-radius: 4px; }
+        .btn-back { color: var(--lt-white); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
+        .btn-back:hover { color: var(--lt-red); }
+
+        /* Page Layout */
+        .page-header { text-align: center; padding: 4rem 2rem 2rem; }
+        .page-header h1 { font-size: 3rem; font-weight: 900; text-transform: uppercase; color: var(--lt-black); }
+        .page-header h1 span { color: var(--lt-red); }
+        
+        .archive-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .news-card { background: var(--lt-white); border-radius: 12px; box-shadow: var(--shadow-lg); padding: 2.5rem; border-top: 6px solid var(--lt-red); display: flex; flex-direction: column; }
+        .news-card p { flex-grow: 1; }
+        .btn-primary { background-color: var(--lt-red); color: var(--lt-white); padding: 0.8rem 1.2rem; font-weight: 700; text-transform: uppercase; text-decoration: none; border-radius: 4px; display: inline-flex; align-items: center; gap: 0.5rem; transition: transform 0.2s; width: fit-content; }
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        .full-footer { background: #000; padding: 1.5rem; text-align: center; color: #555; font-size: 0.85rem; margin-top: 6rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="https://ltrobotics.org/gallery_gen/a2d5731c5531c5bf1c1604e77228af0c_400x400_fit.png?ts=1769354368" alt="Lake Travis Robotics Logo">
+                <div>LT<span>Robotics</span></div>
+            </a>
+            <a href="index.html" class="btn-back"><i data-lucide="arrow-left"></i> Back to Main Site</a>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>Newsletter <span>Archive</span></h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 1rem;">All historical club updates, regionals reports, and announcements.</p>
+    </div>
+
+    <div class="archive-container">
+        <div class="news-grid" id="display-all-newsletters">
+            <p style="text-align: center; grid-column: 1 / -1; color: var(--text-muted);">Loading archive...</p>
+        </div>
+    </div>
+
+    <div class="full-footer">
+        © 2026 Lake Travis High School Robotics Club. All rights reserved.
+    </div>
+
+    <script>
+        const SHEET_ID = "1EsJzNiMcFzNnSQti2QPl8b_KerfDFwRyla_7sihGZo8";
+
+        async function fetchNewsletters() {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Newsletters`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) return [];
+                const csvText = await response.text();
+                if (csvText.includes("<!DOCTYPE html>")) return [];
+
+                return new Promise((resolve) => {
+                    Papa.parse(csvText, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            resolve(results.data);
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error("Failed to load archive", error);
+                return [];
+            }
+        }
+
+        async function initArchive() {
+            const newsData = await fetchNewsletters();
+            const container = document.getElementById('display-all-newsletters');
+
+            if (newsData.length > 0) {
+                let newsHTML = '';
+                // Reverse the entire array so the newest row at the bottom of the sheet is always first
+                const reversedNews = newsData.reverse();
+                
+                reversedNews.forEach(news => {
+                    newsHTML += `
+                        <div class="news-card">
+                            <span style="color: var(--lt-red); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">${news['Tag']}</span>
+                            <h3 style="font-size: 1.5rem; margin: 1rem 0;">${news['Title']}</h3>
+                            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">${news['Description']}</p>
+                            <a href="${news['Link URL']}" target="_blank" class="btn-primary"><i data-lucide="external-link" style="width: 18px;"></i> Read Newsletter</a>
+                        </div>`;
+                });
+                container.innerHTML = newsHTML;
+            } else {
+                container.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">No newsletters found in the archive.</p>';
+            }
+            lucide.createIcons();
+        }
+
+        window.addEventListener('DOMContentLoaded', initArchive);
+    </script>
+</body>
+</html>
