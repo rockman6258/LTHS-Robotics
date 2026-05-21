@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Teams - LT Robotics</title>
+    <link rel="icon" type="image/png" href="https://ltrobotics.org/gallery_gen/a2d5731c5531c5bf1c1604e77228af0c_400x400_fit.png?ts=1769354368">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+</head>
+<body class="archive-page">
+
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="https://ltrobotics.org/gallery_gen/a2d5731c5531c5bf1c1604e77228af0c_400x400_fit.png?ts=1769354368" alt="Lake Travis Robotics Logo">
+                <div>LT<span>Robotics</span></div>
+            </a>
+            <a href="index.html" class="btn-back"><i data-lucide="arrow-left"></i> Back to Main Site</a>
+        </div>
+    </header>
+
+    <div class="page-header">
+        <h1>Meet the <span>Teams</span></h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 1rem;">The engineers, notebookers, and drivers pushing VEX V5RC to the limit.</p>
+    </div>
+
+    <div class="archive-container">
+        <div class="team-grid" id="display-all-teams">
+            <p style="text-align: center; grid-column: 1 / -1; color: var(--text-muted);">Loading database...</p>
+        </div>
+    </div>
+
+    <div class="full-footer">
+        © 2026 Lake Travis High School Robotics Club. All rights reserved.
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
