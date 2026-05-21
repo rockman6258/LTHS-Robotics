@@ -99,8 +99,9 @@ async function initData() {
                         <div class="team-content">
                             <span class="badge badge-red">${team['Team Number']}</span>
                             ${team['Status'] ? `<span class="badge badge-dark">${team['Status']}</span>` : ''}
-                            <h3 class="team-name">${team['Team Name']}</h3>
-                            <div class="team-robot">Robot: <span>${team['Robot Name'] || 'TBD'}</span></div>
+                            
+                            <h3 class="team-name" style="margin-bottom: 1.5rem;">${team['Team Name']}</h3>
+                            
                             <div class="team-members-header"><i data-lucide="users"></i> Roster</div>
                             <div class="member-list">${membersHTML}</div>
                         </div>
