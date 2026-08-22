@@ -147,4 +147,6 @@ footer { background: var(--lt-black); padding: 4rem 2rem; color: var(--bg-light)
 @media (max-width: 900px) {
     #hero { padding-top: 18rem; }
     body.archive-page { padding-top: 240px; }
+    .hero-title { font-size: 2.8rem; }
+    .page-header h1 { font-size: 2.2rem; }
 }
