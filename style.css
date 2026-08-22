@@ -32,8 +32,6 @@ nav a:hover { color: var(--lt-red); }
     .nav-container { flex-direction: column; gap: 1rem; padding: 1rem; }
     nav { gap: 1rem; flex-wrap: wrap; justify-content: center; }
     .logo img { height: 60px; }
-    #hero { padding-top: 18rem; }
-    body.archive-page { padding-top: 240px; }
 }
 
 /* Sections & Typography */
@@ -145,3 +143,8 @@ footer { background: var(--lt-black); padding: 4rem 2rem; color: var(--bg-light)
 .tier-titanium { color: #64748b !important; } .tier-platinum { color: #3b82f6 !important; } .tier-gold { color: #d4af37 !important; } .tier-silver { color: #a1a1aa !important; }
 
 @media (max-width: 600px) { .season-row { flex-direction: column; gap: 0.5rem; align-items: flex-start; } .season-year { width: auto; color: var(--lt-red); } }
+
+@media (max-width: 900px) {
+    #hero { padding-top: 18rem; }
+    body.archive-page { padding-top: 240px; }
+}
