@@ -24,12 +24,11 @@ async function initData() {
             fetchCSV("Socials"), fetchCSV("Competitions"), fetchCSV("Teams")
         ]);
 
-        // 1. General Settings (Hero, Footer, Donate Links)
+        // 1. General Settings
         if (generalData.length > 0) {
             const config = {};
             generalData.forEach(row => { config[row['Setting Name']] = row['Value']; });
             
-            // Safe checking for elements before filling them
             const elHeroTitle = document.getElementById('display-hero-title');
             if (elHeroTitle && config['Hero Title']) elHeroTitle.innerHTML = DOMPurify.sanitize(config['Hero Title']);
             
@@ -56,12 +55,15 @@ async function initData() {
             let mEmail = config['Media Contact Email'] || '';
             if (elMediaEmail) { elMediaEmail.innerText = mEmail; elMediaEmail.href = `mailto:${mEmail}`; }
 
-            document.querySelectorAll('.dynamic-donate').forEach(btn => { 
-                btn.href = config['Donation Link'] || '#'; 
-                if(btn.classList.contains('btn-nav-sponsor') && (!btn.innerText || btn.innerText === '--')) {
-                    btn.innerText = "Donate & Sponsor"; 
-                }
-            });
+            // --- The 3 New Dynamic Links ---
+            const elBiz = document.getElementById('dynamic-link-business');
+            if (elBiz && config['Business Donation Link']) elBiz.href = config['Business Donation Link'];
+            
+            const elCorp = document.getElementById('dynamic-link-corporate');
+            if (elCorp && config['Corporate Donation Link']) elCorp.href = config['Corporate Donation Link'];
+            
+            const elFam = document.getElementById('dynamic-link-family');
+            if (elFam && config['Family Donation Link']) elFam.href = config['Family Donation Link'];
 
             const elCtaTitle = document.getElementById('display-cta-title');
             if (elCtaTitle && config['CTA Title']) elCtaTitle.innerText = config['CTA Title'];
@@ -156,18 +158,14 @@ async function initData() {
 
         // --- Render Target Elements Based on Page ---
         
-        // Teams (Full list on archive, none on index)
         if (document.getElementById('display-all-teams')) renderTeams(teamData, 'display-all-teams');
         
-        // Competitions (Preview on index, Full list on archive)
         if (document.getElementById('display-competitions')) renderComps(compData.slice(-3).reverse(), 'display-competitions');
         if (document.getElementById('display-all-competitions')) renderComps(compData.reverse(), 'display-all-competitions');
         
-        // Newsletters (Preview on index, Full list on archive)
         if (document.getElementById('display-newsletters')) renderNews(newsData.slice(-3).reverse(), 'display-newsletters');
         if (document.getElementById('display-all-newsletters')) renderNews(newsData.reverse(), 'display-all-newsletters');
 
-        // Stats
         const elStatsGrid = document.getElementById('display-stats-grid');
         if (elStatsGrid && statsData.length > 0) {
             let statsHTML = ''; let totalAwardsCount = 0;
@@ -179,7 +177,6 @@ async function initData() {
             document.getElementById('display-total-awards').innerText = totalAwardsCount + "+";
         }
 
-        // Seasons History
         const elSeasons = document.getElementById('display-season-history');
         if (elSeasons && seasonsData.length > 0) {
             let seasonsHTML = '';
@@ -187,7 +184,6 @@ async function initData() {
             elSeasons.innerHTML = DOMPurify.sanitize(seasonsHTML);
         }
 
-        // Gallery
         const elGallery = document.getElementById('display-gallery');
         if (elGallery && galleryData.length > 0) {
             let galleryHTML = '';
@@ -195,7 +191,6 @@ async function initData() {
             elGallery.innerHTML = DOMPurify.sanitize(galleryHTML);
         }
 
-        // Sponsors
         const elSponsors = document.getElementById('display-sponsors');
         if (elSponsors && sponsorsData.length > 0) {
             let sponsorsHTML = ''; const tiers = ['Titanium', 'Platinum', 'Gold', 'Silver'];
@@ -213,7 +208,6 @@ async function initData() {
             elSponsors.innerHTML = DOMPurify.sanitize(sponsorsHTML);
         }
 
-        // Socials
         const elSocials = document.getElementById('display-socials');
         if (elSocials && socialsData.length > 0) {
             let socialsHTML = '<h3>Connect With Us</h3>';
@@ -221,7 +215,6 @@ async function initData() {
             elSocials.innerHTML = DOMPurify.sanitize(socialsHTML);
         }
 
-        // Paint icons
         lucide.createIcons();
 
     } catch (error) {
